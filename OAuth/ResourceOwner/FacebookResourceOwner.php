@@ -14,6 +14,10 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+// MRB EDIT START
+use Symfony\Component\HttpFoundation\Session\Session;
+// MRB EDIT END
+
 /**
  * FacebookResourceOwner.
  *
@@ -114,7 +118,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             'appsecret_proof' => false,
         ));
         // MRB EDIT STOP
-        
+
         $resolver
             ->setAllowedValues('display', array('page', 'popup', 'touch', null)) // @link https://developers.facebook.com/docs/reference/dialogs/#display
             ->setAllowedValues('auth_type', array('rerequest', null)) // @link https://developers.facebook.com/docs/reference/javascript/FB.login/

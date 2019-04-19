@@ -19,6 +19,10 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
+// MRB EDIT START
+use Symfony\Component\HttpFoundation\Session\Session;
+// MRB EDIT END
+
 /**
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
