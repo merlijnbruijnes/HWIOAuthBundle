@@ -17,7 +17,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+
+// MRB EDIT START
 use Symfony\Component\HttpFoundation\Session\Session;
+// MRB EDIT END
 
 /**
  * GenericOAuth2ResourceOwner.

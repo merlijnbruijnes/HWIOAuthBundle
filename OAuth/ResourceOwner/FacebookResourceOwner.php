@@ -15,6 +15,10 @@ use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+// MRB EDIT START
+use Symfony\Component\HttpFoundation\Session\Session;
+// MRB EDIT END
+
 /**
  * FacebookResourceOwner.
  *
