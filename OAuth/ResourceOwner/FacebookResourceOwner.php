@@ -102,17 +102,19 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
+        // MRB EDIT START
         $resolver->setDefaults(array(
-            'authorization_url' => 'https://www.facebook.com/v2.8/dialog/oauth',
-            'access_token_url' => 'https://graph.facebook.com/v2.8/oauth/access_token',
-            'revoke_token_url' => 'https://graph.facebook.com/v2.8/me/permissions',
-            'infos_url' => 'https://graph.facebook.com/v2.8/me?fields=id,first_name,last_name,name,email,picture.type(large)',
+            'authorization_url' => 'https://www.facebook.com/v2.11/dialog/oauth',
+            'access_token_url' => 'https://graph.facebook.com/v2.11/oauth/access_token',
+            'revoke_token_url' => 'https://graph.facebook.com/v2.11/me/permissions',
+            'infos_url' => 'https://graph.facebook.com/v2.11/me?fields=id,first_name,last_name,name,email,picture.type(large)',
             'use_commas_in_scope' => true,
             'display' => null,
             'auth_type' => null,
             'appsecret_proof' => false,
         ));
-
+        // MRB EDIT STOP
+        
         $resolver
             ->setAllowedValues('display', array('page', 'popup', 'touch', null)) // @link https://developers.facebook.com/docs/reference/dialogs/#display
             ->setAllowedValues('auth_type', array('rerequest', null)) // @link https://developers.facebook.com/docs/reference/javascript/FB.login/
@@ -135,5 +137,5 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
         else {
             return $this->options[$value];
         }
-    }    
+    }
 }

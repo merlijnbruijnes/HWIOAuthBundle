@@ -66,6 +66,10 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             $this->storage->save($this, $this->state, 'csrf_state');
         }
 
+        // MRB EDIT START
+        $redirectUri = str_replace('http:', 'https:', $redirectUri);
+        // MRB EDIT END
+
         $parameters = array_merge(array(
             'response_type' => 'code',
             'client_id' => $this->options['client_id'],
@@ -83,6 +87,10 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     public function getAccessToken(HttpRequest $request, $redirectUri, array $extraParameters = array())
     {
         OAuthErrorHandler::handleOAuthError($request);
+
+        // MRB EDIT START
+        $redirectUri = str_replace('http:', 'https:', $redirectUri);
+        // MRB EDIT END
 
         $parameters = array_merge(array(
             'code' => $request->query->get('code'),
@@ -257,5 +265,5 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         else {
             return $this->options[$value];
         }
-    }    
+    }
 }
