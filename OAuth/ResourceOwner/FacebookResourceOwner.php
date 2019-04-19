@@ -40,7 +40,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         if ($this->options['appsecret_proof']) {
-            $extraParameters['appsecret_proof'] = hash_hmac('sha256', $accessToken['access_token'], $this->options['client_secret']);
+            $extraParameters['appsecret_proof'] = hash_hmac('sha256', $accessToken['access_token'], $this->getMrbOption('client_secret'));
         }
 
         return parent::getUserInformation($accessToken, $extraParameters);
@@ -86,8 +86,8 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     public function revokeToken($token)
     {
         $parameters = array(
-            'client_id' => $this->options['client_id'],
-            'client_secret' => $this->options['client_secret'],
+            'client_id' => $this->getMrbOption('client_id'),
+            'client_secret' => $this->getMrbOption('client_secret'),
         );
 
         $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('access_token' => $token)), $parameters, array(), 'DELETE');
@@ -119,4 +119,21 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             ->setAllowedTypes('appsecret_proof', 'bool') // @link https://developers.facebook.com/docs/graph-api/securing-requests
         ;
     }
+
+    /**
+     * @param string    $value
+     * @return string
+     */
+    private function getMrbOption($value)
+    {
+        $session = new Session();
+
+        if (strpos($this->options['authorization_url'], 'facebook') !== false && isset($session->get('core')['api']['facebook'][$value])) {
+
+            return $session->get('core')['api']['facebook'][$value];
+        }
+        else {
+            return $this->options[$value];
+        }
+    }    
 }
