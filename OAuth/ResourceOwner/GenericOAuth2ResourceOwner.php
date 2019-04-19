@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * GenericOAuth2ResourceOwner.
@@ -61,7 +62,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 
         $parameters = array_merge(array(
             'response_type' => 'code',
-            'client_id' => $this->options['client_id'],
+            'client_id' => $this->getMrbOption('client_id'),
             'scope' => $this->options['scope'],
             'state' => $this->state ? urlencode($this->state) : null,
             'redirect_uri' => $redirectUri,
@@ -88,8 +89,8 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $parameters = array_merge(array(
             'code' => $request->query->get('code'),
             'grant_type' => 'authorization_code',
-            'client_id' => $this->options['client_id'],
-            'client_secret' => $this->options['client_secret'],
+            'client_id' => $this->getMrbOption('client_id'),
+            'client_secret' => $this->getMrbOption('client_secret'),
             'redirect_uri' => $redirectUri,
         ), $extraParameters);
 
@@ -109,8 +110,8 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $parameters = array_merge(array(
             'refresh_token' => $refreshToken,
             'grant_type' => 'refresh_token',
-            'client_id' => $this->options['client_id'],
-            'client_secret' => $this->options['client_secret'],
+            'client_id' => $this->getMrbOption('client_id'),
+            'client_secret' => $this->getMrbOption('client_secret'),
         ), $extraParameters);
 
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
@@ -131,8 +132,8 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         }
 
         $parameters = array(
-            'client_id' => $this->options['client_id'],
-            'client_secret' => $this->options['client_secret'],
+            'client_id' => $this->getMrbOption('client_id'),
+            'client_secret' => $this->getMrbOption('client_secret'),
         );
 
         $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), HttpRequestInterface::METHOD_DELETE);
@@ -244,6 +245,23 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             $resolver->setNormalizers(array(
                 'scope' => $scopeNormalizer,
             ));
+        }
+    }
+
+    /**
+     * @param string    $value
+     * @return string
+     */
+    private function getMrbOption($value)
+    {
+        $session = new Session();
+
+        if (strpos($this->options['authorization_url'], 'facebook') !== false && isset($session->get('core')['api']['facebook'][$value])) {
+
+            return $session->get('core')['api']['facebook'][$value];
+        }
+        else {
+            return $this->options[$value];
         }
     }
 }

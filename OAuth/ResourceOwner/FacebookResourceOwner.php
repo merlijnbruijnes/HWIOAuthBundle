@@ -40,7 +40,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         if ($this->options['appsecret_proof']) {
-            $extraParameters['appsecret_proof'] = hash_hmac('sha256', $accessToken['access_token'], $this->options['client_secret']);
+            $extraParameters['appsecret_proof'] = hash_hmac('sha256', $accessToken['access_token'], $this->getMrbOption('client_secret'));
         }
 
         return parent::getUserInformation($accessToken, $extraParameters);
@@ -86,8 +86,8 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     public function revokeToken($token)
     {
         $parameters = array(
-            'client_id' => $this->options['client_id'],
-            'client_secret' => $this->options['client_secret'],
+            'client_id' => $this->getMrbOption('client_id'),
+            'client_secret' => $this->getMrbOption('client_secret'),
         );
 
         $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('access_token' => $token)), $parameters, array(), HttpRequestInterface::METHOD_DELETE);
@@ -103,10 +103,10 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url' => 'https://www.facebook.com/v2.7/dialog/oauth',
-            'access_token_url' => 'https://graph.facebook.com/v2.7/oauth/access_token',
-            'revoke_token_url' => 'https://graph.facebook.com/v2.7/me/permissions',
-            'infos_url' => 'https://graph.facebook.com/v2.7/me?fields=first_name,last_name,name,email',
+            'authorization_url' => 'https://www.facebook.com/v2.11/dialog/oauth',
+            'access_token_url' => 'https://graph.facebook.com/v2.11/oauth/access_token',
+            'revoke_token_url' => 'https://graph.facebook.com/v2.11/me/permissions',
+            'infos_url' => 'https://graph.facebook.com/v2.11/me?fields=first_name,last_name,name,email',
             'use_commas_in_scope' => true,
             'display' => null,
             'auth_type' => null,
@@ -126,6 +126,23 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
                 'auth_type' => array('rerequest', null),
                 'appsecret_proof' => array(true, false),
             ));
+        }
+    }
+
+    /**
+     * @param string    $value
+     * @return string
+     */
+    private function getMrbOption($value)
+    {
+        $session = new Session();
+
+        if (strpos($this->options['authorization_url'], 'facebook') !== false && isset($session->get('core')['api']['facebook'][$value])) {
+
+            return $session->get('core')['api']['facebook'][$value];
+        }
+        else {
+            return $this->options[$value];
         }
     }
 }
