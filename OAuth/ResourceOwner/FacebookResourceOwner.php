@@ -102,6 +102,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
+        // MRB EDIT START
         $resolver->setDefaults(array(
             'authorization_url' => 'https://www.facebook.com/v2.11/dialog/oauth',
             'access_token_url' => 'https://graph.facebook.com/v2.11/oauth/access_token',
@@ -112,6 +113,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             'auth_type' => null,
             'appsecret_proof' => false,
         ));
+        // MRB EDIT END
 
         // Symfony <2.6 BC
         if (method_exists($resolver, 'setDefined')) {
