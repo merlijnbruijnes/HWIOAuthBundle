@@ -72,15 +72,15 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 
         // MRB EDIT START
         $redirectUri = str_replace('http:', 'https:', $redirectUri);
-        // MRB EDIT END
 
         $parameters = array_merge(array(
             'response_type' => 'code',
-            'client_id' => $this->options['client_id'],
+            'client_id' => $this->getMrbOption('client_id'),
             'scope' => $this->options['scope'],
             'state' => $this->state ? urlencode($this->state) : null,
             'redirect_uri' => $redirectUri,
         ), $extraParameters);
+        // MRB EDIT END
 
         return $this->normalizeUrl($this->options['authorization_url'], $parameters);
     }
