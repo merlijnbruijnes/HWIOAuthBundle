@@ -195,8 +195,7 @@ class ConnectController extends Controller
      */
     public function connectServiceAction(Request $request, $service)
     {
-        $coreSession = $this->container->get('mrb_core.core_session_helper')->setCoreSession();
-        $coreManager = $this->container->get('mrb_core.core_helper')->setCoreManager($coreSession);
+        $coreSession = $this->container->get('mrb_core.core_session_helper')->setCoreSession();        
 
         $connect = $this->container->getParameter('hwi_oauth.connect');
         if (!$connect) {
