@@ -112,7 +112,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             'access_token_url' => 'https://graph.facebook.com/v2.11/oauth/access_token',
             'revoke_token_url' => 'https://graph.facebook.com/v2.11/me/permissions',
             'infos_url' => 'https://graph.facebook.com/v2.11/me?fields=id,first_name,last_name,name,email,picture.type(large)',
-            'use_commas_in_scope' => true,
+            'use_commas_in_scope' => false,
             'display' => null,
             'auth_type' => null,
             'appsecret_proof' => false,
